@@ -3,19 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Store Pharma</title>
+    <title>Store Pharma Complet</title>
     <style>
         body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f7f6; margin: 0; padding: 15px; }
         #view-catalog { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; max-width: 900px; margin: 0 auto; }
         .card { background: white; padding: 12px; border-radius: 12px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column; justify-content: space-between; }
-        .card img { width: 100%; height: 150px; object-fit: cover; border-radius: 8px; }
-        .card h3 { font-size: 0.85rem; margin: 10px 0 5px; color: #333; text-transform: uppercase; min-height: 35px; display: flex; align-items: center; justify-content: center; }
+        .card img { width: 100%; height: 140px; object-fit: cover; border-radius: 8px; }
+        .card h3 { font-size: 0.85rem; margin: 10px 0 5px; color: #333; text-transform: uppercase; min-height: 35px; }
         .card .price-range { font-size: 0.75rem; color: #666; font-weight: bold; margin-bottom: 10px; }
         .btn-black { background: #000; color: #fff; border: none; padding: 10px; border-radius: 20px; cursor: pointer; font-weight: bold; font-size: 0.8rem; }
         #view-detail { display: none; background: white; max-width: 500px; margin: 0 auto; padding: 20px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; }
         #detail-img { width: 100%; height: 250px; object-fit: contain; border-radius: 10px; margin-bottom: 15px; }
         .back-link { color: #3498db; cursor: pointer; display: block; margin-bottom: 15px; font-weight: bold; text-align: left; }
-        .desc-box { font-size: 0.9rem; color: #555; background: #f9f9f9; padding: 15px; border-radius: 10px; margin: 15px 0; line-height: 1.5; text-align: left;}
+        .desc-box { font-size: 0.9rem; color: #555; background: #f9f9f9; padding: 15px; border-radius: 10px; margin: 15px 0; line-height: 1.5; text-align: left; }
         .price-big { font-size: 2rem; color: #27ae60; font-weight: bold; margin: 20px 0; }
         label { display: block; margin-top: 15px; font-weight: bold; font-size: 0.85rem; text-align: left; color: #333; }
         select { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #ddd; margin-top: 5px; background: #fff; font-size: 1rem; }
@@ -32,10 +32,8 @@
         <h2 id="detail-title"></h2>
         <div class="desc-box" id="detail-desc"></div>
         <div id="options-area">
-            <div id="dose-wrapper">
-                <label id="dose-label">Sélectionnez les options :</label>
-                <select id="sel-dose" onchange="updateQty()"></select>
-            </div>
+            <label id="dose-label">Dosage / Variété :</label>
+            <select id="sel-dose" onchange="updateQty()"></select>
             <label>Quantité :</label>
             <select id="sel-qty" disabled onchange="updatePrice()"></select>
         </div>
@@ -51,7 +49,7 @@
         const productsDB = {
             "tramadol": {
                 name: "Tramadol",
-                img: "https://res.cloudinary.com/dar9eevt3/image/upload/w_800,h_800,c_pad,b_white,f_auto,q_auto/v1/6008185598566842990_121_kzeeym",
+                img: "https://res.cloudinary.com/dar9eevt3/image/upload/v1/6008185598566842990_121_kzeeym",
                 range: "100,00€ - 10080,00€",
                 desc: "Le tramadol offre une solution fiable aux personnes recherchant le confort et une meilleure qualité de vie. En tant qu'analgésique central, il est largement reconnu pour son efficacité à soulager les douleurs modérées à sévères.",
                 prices: {
@@ -63,7 +61,7 @@
             },
             "xanax": {
                 name: "Xanax / Farmapram",
-                img: "https://res.cloudinary.com/dar9eevt3/image/upload/w_800,h_800,c_pad,b_white,f_auto,q_auto/v1/-5897686531106260347_121_r01qi4",
+                img: "https://res.cloudinary.com/dar9eevt3/image/upload/v1/-5897686531106260347_121_r01qi4",
                 range: "100,00€ - 2000,00€",
                 desc: "Xanax appartient à la classe des benzodiazépines. Il agit sur le cerveau et le système nerveux en potentialisant les effets d'un neurotransmetteur appelé GABA, induisant ainsi un effet calmant.",
                 prices: {
@@ -73,101 +71,13 @@
             },
             "oxycodone": {
                 name: "Oxycodone",
-                img: "https://res.cloudinary.com/dar9eevt3/image/upload/w_800,h_800,c_pad,b_white,f_auto,q_auto/v1/-5841552167540999500_121_hcgvvv",
+                img: "https://res.cloudinary.com/dar9eevt3/image/upload/v1/-5841552167540999500_121_hcgvvv",
                 range: "200,00€ - 1540,00€",
                 desc: "C'est un médicament puissant qui soulage efficacement les douleurs modérées à sévères, avec une formulation à libération prolongée pour un soulagement durable. Nous garantissons une qualité pharmaceutique stricte pour chaque dose.",
                 prices: {
                     "40mg": { "50 tabs=200€": 200, "100 tabs=385€": 385, "500 tabs=850€": 850, "1000 tabs=1445€": 1445 },
                     "80mg": { "50 tabs=220€": 220, "100 tabs=440€": 440, "500 tabs=900€": 900, "1000 tabs=1540€": 1540 }
                 }
-            },
-            "shrooms": {
-                name: "Shrooms magic",
-                img: "https://res.cloudinary.com/dar9eevt3/image/upload/v1/Mushrooms-500x500_exq0wt",
-                range: "100,00€ - 410,00€",
-                desc: "achetez des champignons hallucinogènes et vivez une expérience insulaire inoubliable grâce à des variétés de psilocybine bio de qualité supérieure comme Golden teacher, penis envy et blue meanies",
-                prices: {
-                    "Golden teacher": { "10g=100€": 100, "14g(½ OZ)=125€": 125, "1OZ=225€": 225, "02OZ=410,00€": 410 },
-                    "Penis envy": { "10g=100€": 100, "14g(½ OZ)=125€": 125, "1OZ=225€": 225, "02OZ=410,00€": 410 },
-                    "Blue meanies": { "10g=100€": 100, "14g(½ OZ)=125€": 125, "1OZ=225€": 225, "02OZ=410,00€": 410 }
-                }
-            },
-            "dilaudid": {
-                name: "Dilaudid",
-                img: "https://res.cloudinary.com/dar9eevt3/image/upload/v1/-5778433787720483444_109_hraolk",
-                range: "100,00€ - 6100,00€",
-                desc: "Ce médicament contient du chlorhydrate d’hydromorphone comme principe actif, un puissant analgésique opioïde reconnu pour ses propriétés analgésiques efficaces. En se liant à des récepteurs opioïdes spécifiques du cerveau et de la moelle épinière, Dilaudid soulage efficacement la douleur et procure un confort profond",
-                prices: {
-                    "4mg": { "25pills=100€": 100, "60pills=200€": 200, "200pills=400€": 400, "1000pills=4690€": 4690 },
-                    "8mg": { "25pills=125€": 125, "60pills=266€": 266, "200pills=700€": 700, "1000pills=6100,00€": 6100 }
-                }
-            },
-            "kethamine": {
-                name: "Kethamine",
-                img: "https://res.cloudinary.com/dar9eevt3/image/upload/v1/-5123297961927879647_121_bdc6qw",
-                range: "100,00€ - 700,00€",
-                desc: "la kethamine offre un effet apaisant et onirique idéal pour se détendre ou échapper à l’effervescence des fêtes. Vivez une dissociation de bien être absolu.",
-                prices: { "Options": { "2g=100€": 100, "5g=400€": 400, "10g=700,00€": 700 } }
-            },
-            "lsd": {
-                name: "LSD",
-                img: "https://res.cloudinary.com/dar9eevt3/image/upload/v1/2-3_fz4r7u",
-                range: "100,00€ - 600,00€",
-                desc: "Le LSD ou diéthylamide de l’acide lysergique est un psychédélique qui modifie l’activité des récepteurs de la sérotonine dans le cerveau. Sa composition induit des changements profonds dans la perception, la cognition et les émotions se traduisant souvent par des hallucinations intenses, une intensification des expériences sensorielles et des états de conscience altérés",
-                prices: {
-                    "150ug": { "10tabs=100€": 100, "20tabs=185€": 185, "1sheets=400€": 400 },
-                    "250ug": { "10tabs=125€": 125, "20tabs=230€": 230, "1sheets=500€": 500 },
-                    "350ug": { "10tabs=130€": 130, "20tabs=250€": 250, "1sheets=550€": 550 },
-                    "450ug": { "10tabs=140€": 140, "20tabs=260€": 260, "1sheets=600€": 600 }
-                }
-            },
-            "dmt_cart": {
-                name: "Cartouche de DMT",
-                img: "https://res.cloudinary.com/dar9eevt3/image/upload/v1/-5154503802731211768_121_pqphuz",
-                range: "165,00€ - 9000,00€",
-                desc: "Description : cartouche de N,N-dimethyltryptamine",
-                prices: { "Options": { "02chariots=165€": 165, "05chariots=330€": 330, "10chariots=595,00€": 595, "50chariots=2400,00€": 2400, "200chariots=9000,00€": 9000 } }
-            },
-            "vyvanse": {
-                name: "Vyvanse",
-                img: "https://res.cloudinary.com/dar9eevt3/image/upload/v1/-5893373439048269441_121_pdhtaf",
-                range: "110,00€ - 3550,00€",
-                desc: "Description : vyvanse est un médicament conçu pour aider les personnes atteintes du trouble du déficit de l’attention avec hyperactivité (TDAH) à exploiter pleinement leur potentiel. Notre vyvanse offre une solution complète pour améliorer leur attention, la concentration et gérer les symptômes associés au TDAH",
-                prices: {
-                    "20mg": { "20caps=110€": 110, "60caps=290€": 290, "150caps=550€": 550, "500caps=1500,00€": 1500 },
-                    "30mg": { "20caps=135€": 135, "60caps=335€": 335, "150caps=650€": 650, "500caps=2000,00€": 2000 },
-                    "40mg": { "20caps=150€": 150, "60caps=389€": 389, "150caps=980€": 980, "500caps=2500,00€": 2500 },
-                    "50mg": { "20caps=180€": 180, "60caps=435€": 435, "150caps=800€": 800, "500caps=3000,00€": 3000 },
-                    "70mg": { "20caps=210€": 210, "60caps=570€": 570, "150caps=1000€": 1000, "500caps=3550,00€": 3550 }
-                }
-            },
-            "ecstasy": {
-                name: "Pilules d’ecstasy",
-                img: "https://res.cloudinary.com/dar9eevt3/image/upload/v1/5044141534273973558_120_cgkx6k",
-                range: "100,00€ - 2750,00€",
-                desc: "Description : vivez une expérience euphorique et profonde grâce à nos pilules d’ecstasy de qualité supérieure. Idéales pour faire la fête ou explorer vos sensations personnelles, chaque dose est testée en laboratoire pour garantir sa pureté et sa sécurité, assurant ainsi un effect puissant et fiable",
-                prices: { "Options": { "25pills=100€": 100, "60pills=200€": 200, "200pills=650€": 650, "1000pills=2750,00€": 2750 } }
-            },
-            "coke_peru": {
-                name: "Cocaïne péruvienne pure à 95%",
-                img: "https://res.cloudinary.com/dar9eevt3/image/upload/v1/5078342135513721963_109_c6tsfi",
-                range: "100,00€ - 650,00€",
-                desc: "Description : la cocaïne péruvienne de qualité supérieure et d’une grande pureté disponible avec une livraison rapide. Qualité garantie, testée en laboratoire pour une sécurité optimale, pour une expérience douce et puissante.",
-                prices: { "Options": { "1g=100€": 100, "2g=175€": 175, "5g=390€": 390, "10g=650€": 650 } }
-            },
-            "coke_colom": {
-                name: "Cocaïne colombienne pure à 98%",
-                img: "https://res.cloudinary.com/dar9eevt3/image/upload/v1/image1_arkrku",
-                range: "100,00€ - 750,00€",
-                desc: "Description :Découvrez la pureté de la cocaïne colombienne premium. Réputé pour sa qualité exceptionnelle et ses effets rapides, notre cocaïne vous est livrée discrètement à domicile en toute confidentialité",
-                prices: { "Options": { "1g=100€": 100, "2g=185€": 185, "5g=400€": 400, "10g=750€": 750 } }
-            },
-            "crack": {
-                name: "Cocaïne crack",
-                img: "https://res.cloudinary.com/dar9eevt3/image/upload/v1/c1-247x296_l2mufd",
-                range: "100,00€ - 750,00€",
-                desc: "Description : le crack procure des effets instantanés et intenses. Idéal pour faire la fête ou pour un regain d’énergie.",
-                prices: { "Options": { "1g=100€": 100, "2g=200€": 200, "3,5g=300€": 300, "7g=550€": 550, "10g=750,00€": 750 } }
             },
             "rohypnol": {
                 name: "Rohypnol",
@@ -191,6 +101,153 @@
                     "25mg": { "20 tabs=155€": 155, "60 tabs=450€": 450, "100 tabs=750€": 750, "500 tabs=3000€": 3000 },
                     "30mg": { "20 tabs=165€": 165, "60 tabs=480€": 480, "100 tabs=800€": 800, "500 tabs=3250€": 3250 }
                 }
+            },
+            "sustanon": {
+                name: "Sustanon",
+                img: "https://res.cloudinary.com/dar9eevt3/image/upload/v1/-6043878872740643122_121_m0qsee",
+                range: "110,00€ - 18720,00€",
+                desc: "Le Sustanon est un mélange injectable de quatre esters de testostérone différents, conçu pour fournir une libération rapide et prolongée de testostérone dans le corps. Il est couramment utilisé en thérapie de remplacement de la testostérone et par les athlètes pour améliorer la performance et la croissance musculaire.",
+                prices: {
+                    "250mg": { "2 doses=110€": 110, "10 doses=450€": 450, "100 doses=4260€": 4260, "500 doses=17040€": 17040 },
+                    "300mg": { "2 doses=130€": 130, "10 doses=520€": 520, "100 doses=4680€": 4680, "500 doses=18720€": 18720 }
+                }
+            },
+            "shrooms": {
+                name: "Shrooms magic",
+                img: "https://res.cloudinary.com/dar9eevt3/image/upload/v1/Mushrooms-500x500_exq0wt",
+                range: "100,00€ - 410,00€",
+                desc: "achetez des champignons hallucinogènes et vivez une expérience insulaire inoubliable grâce à des variétés de psilocybine bio de qualité supérieure comme Golden teacher, penis envy et blue meanies",
+                prices: {
+                    "Golden teacher": { "10g=100€": 100, "14g(½ OZ)=125€": 125, "1OZ=225€": 225, "02OZ=410€": 410 },
+                    "Penis envy": { "10g=100€": 100, "14g(½ OZ)=125€": 125, "1OZ=225€": 225, "02OZ=410€": 410 },
+                    "Blue meanies": { "10g=100€": 100, "14g(½ OZ)=125€": 125, "1OZ=225€": 225, "02OZ=410€": 410 }
+                }
+            },
+            "dilaudid": {
+                name: "Dilaudid",
+                img: "https://res.cloudinary.com/dar9eevt3/image/upload/v1/-5778433787720483444_109_hraolk",
+                range: "100,00€ - 6100,00€",
+                desc: "Ce médicament contient du chlorhydrate d’hydromorphone comme principe actif, un puissant analgésique opioïde reconnu pour ses propriétés analgésiques efficaces. En se liant à des récepteurs opioïdes spécifiques du cerveau et de la moelle épinière, Dilaudid soulage efficacement la douleur et procure un confort profond",
+                prices: {
+                    "4mg": { "25pills=100€": 100, "60pills=200€": 200, "200pills=400€": 400, "1000pills=4690€": 4690 },
+                    "8mg": { "25pills=125€": 125, "60pills=266€": 266, "200pills=700€": 700, "1000pills=6100€": 6100 }
+                }
+            },
+            "kethamine": {
+                name: "Kethamine",
+                img: "https://res.cloudinary.com/dar9eevt3/image/upload/v1/-5123297961927879647_121_bdc6qw",
+                range: "100,00€ - 700,00€",
+                desc: "la kethamine offre un effet apaisant et onirique idéal pour se détendre ou échapper à l’effervescence des fêtes. Vivez une dissociation de bien être absolu.",
+                prices: { "Options": { "2g=100€": 100, "5g=400€": 400, "10g=700€": 700 } }
+            },
+            "lsd": {
+                name: "LSD",
+                img: "https://res.cloudinary.com/dar9eevt3/image/upload/v1/2-3_fz4r7u",
+                range: "100,00€ - 600,00€",
+                desc: "Le LSD ou diéthylamide de l’acide lysergique est un psychédélique qui modifie l’activité des récepteurs de la sérotonine dans le cerveau. Sa composition induit des changements profonds dans la perception, la cognition et les émotions se traduisant souvent par des hallucinations intenses, une intensification des expériences sensorielles et des états de conscience altérés",
+                prices: {
+                    "150ug": { "10tabs=100€": 100, "20tabs=185€": 185, "1sheets=400€": 400 },
+                    "250ug": { "10tabs=125€": 125, "20tabs=230€": 230, "1sheets=500€": 500 },
+                    "350ug": { "10tabs=130€": 130, "20tabs=250€": 250, "1sheets=550€": 550 },
+                    "450ug": { "10tabs=140€": 140, "20tabs=260€": 260, "1sheets=600€": 600 }
+                }
+            },
+            "dmt_cart": {
+                name: "Cartouche de DMT",
+                img: "https://res.cloudinary.com/dar9eevt3/image/upload/v1/-5154503802731211768_121_pqphuz",
+                range: "165,00€ - 9000,00€",
+                desc: "Description : cartouche de N,N-dimethyltryptamine",
+                prices: { "Options": { "02chariots=165€": 165, "05chariots=330€": 330, "10chariots=595€": 595, "50chariots=2400€": 2400, "200chariots=9000€": 9000 } }
+            },
+            "vyvanse": {
+                name: "Vyvanse",
+                img: "https://res.cloudinary.com/dar9eevt3/image/upload/v1/-5893373439048269441_121_pdhtaf",
+                range: "110,00€ - 3550,00€",
+                desc: "Description : vyvanse est un médicament conçu pour aider les personnes atteintes du trouble du déficit de l’attention avec hyperactivité (TDAH) à exploiter pleinement leur potentiel. Notre vyvanse offre une solution complète pour améliorer leur attention, la concentration et gérer les symptômes associés au TDAH",
+                prices: {
+                    "20mg": { "20caps=110€": 110, "60caps=290€": 290, "150caps=550€": 550, "500caps=1500€": 1500 },
+                    "30mg": { "20caps=135€": 135, "60caps=335€": 335, "150caps=650€": 650, "500caps=2000€": 2000 },
+                    "40mg": { "20caps=150€": 150, "60caps=389€": 389, "150caps=980€": 980, "500caps=2500€": 2500 },
+                    "50mg": { "20caps=180€": 180, "60caps=435€": 435, "150caps=800€": 800, "500caps=3000€": 3000 },
+                    "70mg": { "20caps=210€": 210, "60caps=570€": 570, "150caps=1000€": 1000, "500caps=3550€": 3550 }
+                }
+            },
+            "ecstasy": {
+                name: "Pilules d’ecstasy",
+                img: "https://res.cloudinary.com/dar9eevt3/image/upload/v1/5044141534273973558_120_cgkx6k",
+                range: "100,00€ - 2750,00€",
+                desc: "Description : vivez une expérience euphorique et profonde grâce à nos pilules d’ecstasy de qualité supérieure. Idéales pour faire la fête ou explorer vos sensations personnelles, chaque dose est testée en laboratoire pour garantir sa pureté et sa sécurité, assurant ainsi un effect puissant et fiable",
+                prices: { "Options": { "25pills=100€": 100, "60pills=200€": 200, "200pills=650€": 650, "1000pills=2750€": 2750 } }
+            },
+            "coke_peru": {
+                name: "Cocaïne péruvienne 95%",
+                img: "https://res.cloudinary.com/dar9eevt3/image/upload/v1/5078342135513721963_109_c6tsfi",
+                range: "100,00€ - 650,00€",
+                desc: "Description : la cocaïne péruvienne de qualité supérieure et d’une grande pureté disponible avec une livraison rapide. Qualité garantie, testée en laboratoire pour une sécurité optimale, pour une expérience douce et puissante.",
+                prices: { "Options": { "1g=100€": 100, "2g=175€": 175, "5g=390€": 390, "10g=650€": 650 } }
+            },
+            "coke_colom": {
+                name: "Cocaïne colombienne 98%",
+                img: "https://res.cloudinary.com/dar9eevt3/image/upload/v1/image1_arkrku",
+                range: "100,00€ - 750,00€",
+                desc: "Description :Découvrez la pureté de la cocaïne colombienne premium. Réputé pour sa qualité exceptionnelle et ses effets rapides, notre cocaïne vous est livrée discrètement à domicile en toute confidentialité",
+                prices: { "Options": { "1g=100€": 100, "2g=185€": 185, "5g=400€": 400, "10g=750€": 750 } }
+            },
+            "crack": {
+                name: "Cocaïne crack",
+                img: "https://res.cloudinary.com/dar9eevt3/image/upload/v1/c1-247x296_l2mufd",
+                range: "100,00€ - 750,00€",
+                desc: "Description : le crack procure des effets instantanés et intenses. Idéal pour faire la fête ou pour un regain d’énergie.",
+                prices: { "Options": { "1g=100€": 100, "2g=200€": 200, "3,5g=300€": 300, "7g=550€": 550, "10g=750€": 750 } }
+            },
+            "hash": {
+                name: "Hashish",
+                img: "https://res.cloudinary.com/dar9eevt3/image/upload/v1/hash_bporrc",
+                range: "100,00€ - 650,00€",
+                desc: "Notre sélection de haschisch comprend du haschisch marocain de qualité supérieure, des charas indiens et du bubble hash puissant, tous sélectionnés pour leur pureté et leur puissance.",
+                prices: {
+                    "Marocain Premium": { "2,5g=100€": 100, "5g=180€": 180, "10g=340€": 340, "20g=650€": 650 },
+                    "Charas Hash": { "2,5g=100€": 100, "5g=180€": 180, "10g=340€": 340, "20g=650€": 650 },
+                    "Bubble Hash": { "2,5g=100€": 100, "5g=180€": 180, "10g=340€": 340, "20g=650€": 650 }
+                }
+            },
+            "ritalin": {
+                name: "Ritalin",
+                img: "https://res.cloudinary.com/dar9eevt3/image/upload/v1/-6021417898884580395_121_aztv3s",
+                range: "180,00€ - 2050,00€",
+                desc: "La Ritaline est un stimulant du système nerveux central utilisé pour traiter le trouble du déficit de l'attention avec hyperactivité (TDAH) et la narcolepsie. Elle aide à augmenter l'attention et à réduire l'impulsivité et l'hyperactivité.",
+                prices: {
+                    "10mg": { "20 tabs=180€": 180, "60 tabs=410€": 410, "100 tabs=650€": 650, "500 tabs=1870€": 1870 },
+                    "20mg": { "20 tabs=200€": 200, "60 tabs=450€": 450, "100 tabs=750€": 750, "500 tabs=1950€": 1950 },
+                    "60mg": { "20 tabs=260€": 260, "60 tabs=580€": 580, "100 tabs=890€": 890, "500 tabs=2050€": 2050 }
+                }
+            },
+            "lsd_gel": {
+                name: "LSD Gel",
+                img: "https://res.cloudinary.com/dar9eevt3/image/upload/v1/-4972279485802064825_121_jgjzac",
+                range: "100,00€ - 625,00€",
+                desc: "Les comprimés de gel LSD offrent une expérience psychédélique propre et puissante. Chaque comprimé est dosé avec précision pour garantir une expérience cohérente et transformative.",
+                prices: {
+                    "150ug": { "10 tabs=100€": 100, "20 tabs=185€": 185, "1 sheets=500€": 500 },
+                    "450ug": { "10 tabs=130€": 130, "20 tabs=260€": 260, "1 sheets=625€": 625 }
+                }
+            },
+            "lyrica": {
+                name: "Lyrica",
+                img: "https://res.cloudinary.com/dar9eevt3/image/upload/v1/-5068903352175275397_120_btunww",
+                range: "100,00€ - 1300,00€",
+                desc: "Lyrica est utilisé pour traiter les douleurs neuropathiques, l'épilepsie et le trouble anxieux généralisé. Il agit en calmant les nerfs hyperactifs dans le corps, apportant ainsi un soulagement significatif.",
+                prices: {
+                    "25mg": { "112 tabs=100€": 100, "224 tabs=185€": 185, "448 tabs=340€": 340, "560 tabs=400€": 400 },
+                    "300mg": { "56 tabs=200€": 200, "112 tabs=340€": 340, "224 tabs=585€": 585, "560 tabs=1300€": 1300 }
+                }
+            },
+            "dmt_pure": {
+                name: "DMT",
+                img: "https://res.cloudinary.com/dar9eevt3/image/upload/v1/5843700699161019141_109_v2wtdp",
+                range: "100,00€ - 400,00€",
+                desc: "La DMT (N,N-diméthyltryptamine) est une substance psychédélique puissante que l'on trouve dans de nombreuses plantes et animaux. Elle est connue pour ses effets visuels intenses et ses expériences de type spirituel.",
+                prices: { "Pureté Crystal": { "1g=100€": 100, "2g=175€": 175, "3g=250€": 250, "5g=400€": 400 } }
             }
         };
 
