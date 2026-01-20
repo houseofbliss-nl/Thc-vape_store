@@ -3,67 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Store Pharma Complet</title>
+    <title>Store Pharma</title>
     <style>
         body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f7f6; margin: 0; padding: 15px; }
-        
-        #view-catalog {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .card {
-            background: white;
-            padding: 12px;
-            border-radius: 12px;
-            text-align: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
+        #view-catalog { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; max-width: 900px; margin: 0 auto; }
+        .card { background: white; padding: 12px; border-radius: 12px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column; justify-content: space-between; }
         .card img { width: 100%; height: 150px; object-fit: cover; border-radius: 8px; }
         .card h3 { font-size: 0.85rem; margin: 10px 0 5px; color: #333; text-transform: uppercase; min-height: 35px; display: flex; align-items: center; justify-content: center; }
         .card .price-range { font-size: 0.75rem; color: #666; font-weight: bold; margin-bottom: 10px; }
-
-        .btn-black {
-            background: #000;
-            color: #fff;
-            border: none;
-            padding: 10px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 0.8rem;
-        }
-
-        #view-detail {
-            display: none; 
-            background: white;
-            max-width: 500px;
-            margin: 0 auto;
-            padding: 20px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            text-align: center;
-        }
-
+        .btn-black { background: #000; color: #fff; border: none; padding: 10px; border-radius: 20px; cursor: pointer; font-weight: bold; font-size: 0.8rem; }
+        #view-detail { display: none; background: white; max-width: 500px; margin: 0 auto; padding: 20px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; }
         #detail-img { width: 100%; height: 250px; object-fit: contain; border-radius: 10px; margin-bottom: 15px; }
         .back-link { color: #3498db; cursor: pointer; display: block; margin-bottom: 15px; font-weight: bold; text-align: left; }
         .desc-box { font-size: 0.9rem; color: #555; background: #f9f9f9; padding: 15px; border-radius: 10px; margin: 15px 0; line-height: 1.5; text-align: left;}
-        
         .price-big { font-size: 2rem; color: #27ae60; font-weight: bold; margin: 20px 0; }
         label { display: block; margin-top: 15px; font-weight: bold; font-size: 0.85rem; text-align: left; color: #333; }
         select { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #ddd; margin-top: 5px; background: #fff; font-size: 1rem; }
-
-        @media (max-width: 500px) {
-            #view-catalog { grid-template-columns: 1fr 1fr; gap: 8px; }
-            .card img { height: 120px; }
-        }
+        @media (max-width: 500px) { #view-catalog { grid-template-columns: 1fr 1fr; gap: 8px; } }
     </style>
 </head>
 <body>
@@ -75,17 +31,14 @@
         <img id="detail-img" src="">
         <h2 id="detail-title"></h2>
         <div class="desc-box" id="detail-desc"></div>
-
         <div id="options-area">
             <div id="dose-wrapper">
-                <label id="dose-label">Sélectionnez une option :</label>
+                <label id="dose-label">Sélectionnez les options :</label>
                 <select id="sel-dose" onchange="updateQty()"></select>
             </div>
-
             <label>Quantité :</label>
             <select id="sel-qty" disabled onchange="updatePrice()"></select>
         </div>
-
         <div id="price-area" style="display:none">
             <div class="price-big"><span id="final-p">0,00</span>€</div>
             <button class="btn-black" style="background:#27ae60; width:100%; font-size:1.1rem; padding:15px; border-radius:10px;">AJOUTER AU PANIER</button>
@@ -93,203 +46,151 @@
     </div>
 
     <script>
-        function formatPrice(num) {
-            return num.toFixed(2).replace('.', ',');
-        }
+        function formatPrice(num) { return num.toFixed(2).replace('.', ','); }
 
         const productsDB = {
             "tramadol": {
                 name: "Tramadol",
                 img: "https://res.cloudinary.com/dar9eevt3/image/upload/w_800,h_800,c_pad,b_white,f_auto,q_auto/v1/6008185598566842990_121_kzeeym",
                 range: "100,00€ - 10080,00€",
-                desc: "Analgésique central fiable pour le confort et une meilleure qualité de vie.",
+                desc: "Le tramadol offre une solution fiable aux personnes recherchant le confort et une meilleure qualité de vie. En tant qu'analgésique central, il est largement reconnu pour son efficacité à soulager les douleurs modérées à sévères.",
                 prices: {
-                    "50mg": { "20 pills": 100, "60 pills": 200, "200 pills": 500, "1000 pills": 3200 },
-                    "100mg": { "20 pills": 120, "60 pills": 250, "200 pills": 750, "1000 pills": 5200 },
-                    "200mg": { "20 pills": 155, "60 pills": 310, "200 pills": 890, "1000 pills": 8000 },
-                    "500mg": { "20 pills": 170, "60 pills": 359, "200 pills": 1050, "1000 pills": 10080 }
+                    "50mg": { "20 pills=100€": 100, "60 pills=200€": 200, "200 pills=500€": 500, "1000 pills=3200€": 3200 },
+                    "100mg": { "20 pills=120€": 120, "60 pills=250€": 250, "200 pills=750€": 750, "1000 pills=5200€": 5200 },
+                    "200mg": { "20 pills=155€": 155, "60 pills=310€": 310, "200 pills=890€": 890, "1000 pills=8000€": 8000 },
+                    "500mg": { "20 pills=170€": 170, "60 pills=359€": 359, "200 pills=1050€": 1050, "1000 pills=10080€": 10080 }
                 }
             },
             "xanax": {
                 name: "Xanax / Farmapram",
                 img: "https://res.cloudinary.com/dar9eevt3/image/upload/w_800,h_800,c_pad,b_white,f_auto,q_auto/v1/-5897686531106260347_121_r01qi4",
                 range: "100,00€ - 2000,00€",
-                desc: "Potentialise les effets du GABA pour apaiser le cerveau et le système nerveux.",
+                desc: "Xanax appartient à la classe des benzodiazépines. Il agit sur le cerveau et le système nerveux en potentialisant les effets d'un neurotransmetteur appelé GABA, induisant ainsi un effet calmant.",
                 prices: {
-                    "1mg": { "90 tabs": 100, "300 tabs": 250, "900 tabs": 800, "1500 tabs": 1200 },
-                    "2mg": { "90 tabs": 200, "300 tabs": 500, "900 tabs": 1500, "1500 tabs": 2000 }
+                    "1mg": { "90 bars=100€": 100, "300 bars=250€": 250, "900 bars=800€": 800, "1500 bars=1200€": 1200 },
+                    "2mg": { "90 bars=200€": 200, "300 bars=500€": 500, "900 bars=1500€": 1500, "1500 bars=2000€": 2000 }
                 }
             },
             "oxycodone": {
                 name: "Oxycodone",
                 img: "https://res.cloudinary.com/dar9eevt3/image/upload/w_800,h_800,c_pad,b_white,f_auto,q_auto/v1/-5841552167540999500_121_hcgvvv",
                 range: "200,00€ - 1540,00€",
-                desc: "Soulage les douleurs modérées à sévères. Qualité pharmaceutique stricte.",
+                desc: "C'est un médicament puissant qui soulage efficacement les douleurs modérées à sévères, avec une formulation à libération prolongée pour un soulagement durable. Nous garantissons une qualité pharmaceutique stricte pour chaque dose.",
                 prices: {
-                    "40mg": { "50tabs": 200, "100tabs": 385, "500tabs": 850, "1000tabs": 1445 },
-                    "80mg": { "50tabs": 220, "100tabs": 440, "500tabs": 900, "1000tabs": 1540 }
-                }
-            },
-            "sustanon": {
-                name: "Sustanon",
-                img: "https://res.cloudinary.com/dar9eevt3/image/upload/w_800,h_800,c_pad,b_white,f_auto,q_auto/v1/-6043878872740643122_121_m0qsee",
-                range: "110,00€ - 18720,00€",
-                desc: "Mélange de quatre esters de testostérone pour effets immédiats et durables.",
-                prices: {
-                    "250mg": { "2 doses": 110, "10 doses": 450, "100 doses": 4260, "500 doses": 17040 },
-                    "300mg": { "2 doses": 130, "10 doses": 520, "100 doses": 4680, "500 doses": 18720 }
-                }
-            },
-            "hash": {
-                name: "Hashish",
-                img: "https://res.cloudinary.com/dar9eevt3/image/upload/w_800,h_800,c_pad,b_white,f_auto,q_auto/v1/hash_bporrc",
-                range: "100,00€ - 650,00€",
-                desc: "Sélection de haschisch marocain, charas et bubble hash puissant.",
-                prices: {
-                    "Marocain Premium": { "2,5g": 100, "5g": 180, "10g": 340, "20g": 650 },
-                    "Charas Hash": { "2,5g": 100, "5g": 180, "10g": 340, "20g": 650 },
-                    "Bubble Hash": { "2,5g": 100, "5g": 180, "10g": 340, "20g": 650 }
-                }
-            },
-            "ritalin": {
-                name: "Ritalin",
-                img: "https://res.cloudinary.com/dar9eevt3/image/upload/w_800,h_800,c_pad,b_white,f_auto,q_auto/v1/-6021417898884580395_121_aztv3s",
-                range: "180,00€ - 2050,00€",
-                desc: "Améliore la concentration et l’attention (TDAH).",
-                prices: {
-                    "10mg": { "20tabs": 180, "500tabs": 1870 },
-                    "60mg": { "20tabs": 260, "500tabs": 2050 }
-                }
-            },
-            "lsd_gel": {
-                name: "LSD Gel",
-                img: "https://res.cloudinary.com/dar9eevt3/image/upload/w_800,h_800,c_pad,b_white,f_auto,q_auto/v1/-4972279485802064825_121_jgjzac",
-                range: "100,00€ - 625,00€",
-                desc: "Expérience psychédélique intense. Gélules ou buvards de qualité.",
-                prices: {
-                    "150ug": { "10tabs": 100, "1sheets": 500 },
-                    "450ug": { "10tabs": 130, "1sheets": 625 }
-                }
-            },
-            "lyrica": {
-                name: "Lyrica",
-                img: "https://res.cloudinary.com/dar9eevt3/image/upload/w_800,h_800,c_pad,b_white,f_auto,q_auto/v1/-5068903352175275397_120_btunww",
-                range: "100,00€ - 1300,00€",
-                desc: "Traite douleurs neuropathiques, épilepsie et anxiété généralisée.",
-                prices: {
-                    "25mg": { "112tabs": 100, "560tabs": 400 },
-                    "300mg": { "56tabs": 200, "560tabs": 1300 }
-                }
-            },
-            "rohypnol": {
-                name: "Rohypnol",
-                img: "https://res.cloudinary.com/dar9eevt3/image/upload/w_800,h_800,c_pad,b_white,f_auto,q_auto/v1/-5767180595447841515_120_ggihnb",
-                range: "150,00€ - 1220,00€",
-                desc: "Dépresseur du système nerveux central (benzodiazépine).",
-                prices: {
-                    "1mg": { "90tabs": 150, "600pills": 1000 },
-                    "2mg": { "90tabs": 210, "600pills": 1220 }
-                }
-            },
-            "dmt_pure": {
-                name: "DMT",
-                img: "https://res.cloudinary.com/dar9eevt3/image/upload/w_800,h_800,c_pad,b_white,f_auto,q_auto/v1/5843700699161019141_109_v2wtdp",
-                range: "100,00€ - 400,00€",
-                desc: "Expérience de mort imminente ou immersion dans une autre dimension.",
-                prices: { "Poudre Pure": { "1g": 100, "2g": 175, "5g": 400 } }
-            },
-            "adderall": {
-                name: "Adderall",
-                img: "https://res.cloudinary.com/dar9eevt3/image/upload/w_800,h_800,c_pad,b_white,f_auto,q_auto/v1/-5782989369337037424_121_mar9z7",
-                range: "120,00€ - 3250,00€",
-                desc: "Améliore la concentration et les pensées cognitives (TDAH).",
-                prices: {
-                    "10mg": { "20tabs": 120, "500tabs": 2400 },
-                    "30mg": { "20tabs": 165, "500tabs": 3250 }
+                    "40mg": { "50 tabs=200€": 200, "100 tabs=385€": 385, "500 tabs=850€": 850, "1000 tabs=1445€": 1445 },
+                    "80mg": { "50 tabs=220€": 220, "100 tabs=440€": 440, "500 tabs=900€": 900, "1000 tabs=1540€": 1540 }
                 }
             },
             "shrooms": {
-                name: "Shrooms Magic",
-                img: "https://res.cloudinary.com/dar9eevt3/image/upload/w_800,h_800,c_pad,b_white,f_auto,q_auto/v1/Mushrooms-500x500_exq0wt",
+                name: "Shrooms magic",
+                img: "https://res.cloudinary.com/dar9eevt3/image/upload/v1/Mushrooms-500x500_exq0wt",
                 range: "100,00€ - 410,00€",
-                desc: "Champignons hallucinogènes psilocybine bio : Golden teacher, penis envy, blue meanies.",
+                desc: "achetez des champignons hallucinogènes et vivez une expérience insulaire inoubliable grâce à des variétés de psilocybine bio de qualité supérieure comme Golden teacher, penis envy et blue meanies",
                 prices: {
-                    "Golden teacher": { "10g": 100, "14g(½ OZ)": 125, "1OZ": 225, "02OZ": 410 },
-                    "Penis envy": { "10g": 100, "14g(½ OZ)": 125, "1OZ": 225, "02OZ": 410 },
-                    "Blue meanies": { "10g": 100, "14g(½ OZ)": 125, "1OZ": 225, "02OZ": 410 }
+                    "Golden teacher": { "10g=100€": 100, "14g(½ OZ)=125€": 125, "1OZ=225€": 225, "02OZ=410,00€": 410 },
+                    "Penis envy": { "10g=100€": 100, "14g(½ OZ)=125€": 125, "1OZ=225€": 225, "02OZ=410,00€": 410 },
+                    "Blue meanies": { "10g=100€": 100, "14g(½ OZ)=125€": 125, "1OZ=225€": 225, "02OZ=410,00€": 410 }
                 }
             },
             "dilaudid": {
                 name: "Dilaudid",
-                img: "https://res.cloudinary.com/dar9eevt3/image/upload/w_800,h_800,c_pad,b_white,f_auto,q_auto/v1/-5778433787720483444_109_hraolk",
+                img: "https://res.cloudinary.com/dar9eevt3/image/upload/v1/-5778433787720483444_109_hraolk",
                 range: "100,00€ - 6100,00€",
-                desc: "Hydromorphone puissant pour un soulagement profond.",
+                desc: "Ce médicament contient du chlorhydrate d’hydromorphone comme principe actif, un puissant analgésique opioïde reconnu pour ses propriétés analgésiques efficaces. En se liant à des récepteurs opioïdes spécifiques du cerveau et de la moelle épinière, Dilaudid soulage efficacement la douleur et procure un confort profond",
                 prices: {
-                    "4mg": { "25pills": 100, "1000pills": 4690 },
-                    "8mg": { "25pills": 125, "1000pills": 6100 }
+                    "4mg": { "25pills=100€": 100, "60pills=200€": 200, "200pills=400€": 400, "1000pills=4690€": 4690 },
+                    "8mg": { "25pills=125€": 125, "60pills=266€": 266, "200pills=700€": 700, "1000pills=6100,00€": 6100 }
                 }
             },
             "kethamine": {
                 name: "Kethamine",
-                img: "https://res.cloudinary.com/dar9eevt3/image/upload/w_800,h_800,c_pad,b_white,f_auto,q_auto/v1/-5123297961927879647_121_bdc6qw",
+                img: "https://res.cloudinary.com/dar9eevt3/image/upload/v1/-5123297961927879647_121_bdc6qw",
                 range: "100,00€ - 700,00€",
-                desc: "Effet apaisant et onirique, dissociation de bien-être.",
-                prices: { "Standard": { "2g": 100, "5g": 400, "10g": 700 } }
+                desc: "la kethamine offre un effet apaisant et onirique idéal pour se détendre ou échapper à l’effervescence des fêtes. Vivez une dissociation de bien être absolu.",
+                prices: { "Options": { "2g=100€": 100, "5g=400€": 400, "10g=700,00€": 700 } }
             },
-            "lsd_standard": {
+            "lsd": {
                 name: "LSD",
-                img: "https://res.cloudinary.com/dar9eevt3/image/upload/w_800,h_800,c_pad,b_white,f_auto,q_auto/v1/2-3_fz4r7u",
+                img: "https://res.cloudinary.com/dar9eevt3/image/upload/v1/2-3_fz4r7u",
                 range: "100,00€ - 600,00€",
-                desc: "Modifie la perception, la cognition et les émotions.",
+                desc: "Le LSD ou diéthylamide de l’acide lysergique est un psychédélique qui modifie l’activité des récepteurs de la sérotonine dans le cerveau. Sa composition induit des changements profonds dans la perception, la cognition et les émotions se traduisant souvent par des hallucinations intenses, une intensification des expériences sensorielles et des états de conscience altérés",
                 prices: {
-                    "150ug": { "10tabs": 100, "1sheets": 400 },
-                    "450ug": { "10tabs": 140, "1sheets": 600 }
+                    "150ug": { "10tabs=100€": 100, "20tabs=185€": 185, "1sheets=400€": 400 },
+                    "250ug": { "10tabs=125€": 125, "20tabs=230€": 230, "1sheets=500€": 500 },
+                    "350ug": { "10tabs=130€": 130, "20tabs=250€": 250, "1sheets=550€": 550 },
+                    "450ug": { "10tabs=140€": 140, "20tabs=260€": 260, "1sheets=600€": 600 }
                 }
             },
-            "dmt_cartridge": {
+            "dmt_cart": {
                 name: "Cartouche de DMT",
-                img: "https://res.cloudinary.com/dar9eevt3/image/upload/w_800,h_800,c_pad,b_white,f_auto,q_auto/v1/-5154503802731211768_121_pqphuz",
+                img: "https://res.cloudinary.com/dar9eevt3/image/upload/v1/-5154503802731211768_121_pqphuz",
                 range: "165,00€ - 9000,00€",
-                desc: "Cartouche de N,N-dimethyltryptamine.",
-                prices: { "Standard": { "02chariots": 165, "200chariots": 9000 } }
+                desc: "Description : cartouche de N,N-dimethyltryptamine",
+                prices: { "Options": { "02chariots=165€": 165, "05chariots=330€": 330, "10chariots=595,00€": 595, "50chariots=2400,00€": 2400, "200chariots=9000,00€": 9000 } }
             },
             "vyvanse": {
                 name: "Vyvanse",
-                img: "https://res.cloudinary.com/dar9eevt3/image/upload/w_800,h_800,c_pad,b_white,f_auto,q_auto/v1/-5893373439048269441_121_pdhtaf",
+                img: "https://res.cloudinary.com/dar9eevt3/image/upload/v1/-5893373439048269441_121_pdhtaf",
                 range: "110,00€ - 3550,00€",
-                desc: "Améliore l’attention et la concentration (TDAH).",
+                desc: "Description : vyvanse est un médicament conçu pour aider les personnes atteintes du trouble du déficit de l’attention avec hyperactivité (TDAH) à exploiter pleinement leur potentiel. Notre vyvanse offre une solution complète pour améliorer leur attention, la concentration et gérer les symptômes associés au TDAH",
                 prices: {
-                    "20mg": { "20caps": 110, "500caps": 1500 },
-                    "70mg": { "20caps": 210, "500caps": 3550 }
+                    "20mg": { "20caps=110€": 110, "60caps=290€": 290, "150caps=550€": 550, "500caps=1500,00€": 1500 },
+                    "30mg": { "20caps=135€": 135, "60caps=335€": 335, "150caps=650€": 650, "500caps=2000,00€": 2000 },
+                    "40mg": { "20caps=150€": 150, "60caps=389€": 389, "150caps=980€": 980, "500caps=2500,00€": 2500 },
+                    "50mg": { "20caps=180€": 180, "60caps=435€": 435, "150caps=800€": 800, "500caps=3000,00€": 3000 },
+                    "70mg": { "20caps=210€": 210, "60caps=570€": 570, "150caps=1000€": 1000, "500caps=3550,00€": 3550 }
                 }
             },
             "ecstasy": {
-                name: "Pilules d'ecstasy",
-                img: "https://res.cloudinary.com/dar9eevt3/image/upload/w_800,h_800,c_pad,b_white,f_auto,q_auto/v1/5044141534273973558_120_cgkx6k",
+                name: "Pilules d’ecstasy",
+                img: "https://res.cloudinary.com/dar9eevt3/image/upload/v1/5044141534273973558_120_cgkx6k",
                 range: "100,00€ - 2750,00€",
-                desc: "Expérience euphorique, testé en laboratoire.",
-                prices: { "Qualité Lab": { "25pills": 100, "1000pills": 2750 } }
+                desc: "Description : vivez une expérience euphorique et profonde grâce à nos pilules d’ecstasy de qualité supérieure. Idéales pour faire la fête ou explorer vos sensations personnelles, chaque dose est testée en laboratoire pour garantir sa pureté et sa sécurité, assurant ainsi un effect puissant et fiable",
+                prices: { "Options": { "25pills=100€": 100, "60pills=200€": 200, "200pills=650€": 650, "1000pills=2750,00€": 2750 } }
             },
             "coke_peru": {
-                name: "Coke péruvienne 95%",
-                img: "https://res.cloudinary.com/dar9eevt3/image/upload/w_800,h_800,c_pad,b_white,f_auto,q_auto/v1/5078342135513721963_109_c6tsfi",
+                name: "Cocaïne péruvienne pure à 95%",
+                img: "https://res.cloudinary.com/dar9eevt3/image/upload/v1/5078342135513721963_109_c6tsfi",
                 range: "100,00€ - 650,00€",
-                desc: "Pureté supérieure, livraison rapide.",
-                prices: { "Pure 95%": { "1g": 100, "10g": 650 } }
+                desc: "Description : la cocaïne péruvienne de qualité supérieure et d’une grande pureté disponible avec une livraison rapide. Qualité garantie, testée en laboratoire pour une sécurité optimale, pour une expérience douce et puissante.",
+                prices: { "Options": { "1g=100€": 100, "2g=175€": 175, "5g=390€": 390, "10g=650€": 650 } }
             },
             "coke_colom": {
-                name: "Coke colombienne 98%",
-                img: "https://res.cloudinary.com/dar9eevt3/image/upload/w_800,h_800,c_pad,b_white,f_auto,q_auto/v1/image1_arkrku",
+                name: "Cocaïne colombienne pure à 98%",
+                img: "https://res.cloudinary.com/dar9eevt3/image/upload/v1/image1_arkrku",
                 range: "100,00€ - 750,00€",
-                desc: "Cocaïne colombienne premium, effets rapides.",
-                prices: { "Pure 98%": { "1g": 100, "10g": 750 } }
+                desc: "Description :Découvrez la pureté de la cocaïne colombienne premium. Réputé pour sa qualité exceptionnelle et ses effets rapides, notre cocaïne vous est livrée discrètement à domicile en toute confidentialité",
+                prices: { "Options": { "1g=100€": 100, "2g=185€": 185, "5g=400€": 400, "10g=750€": 750 } }
             },
             "crack": {
                 name: "Cocaïne crack",
-                img: "https://res.cloudinary.com/dar9eevt3/image/upload/w_800,h_800,c_pad,b_white,f_auto,q_auto/v1/c1-247x296_l2mufd",
+                img: "https://res.cloudinary.com/dar9eevt3/image/upload/v1/c1-247x296_l2mufd",
                 range: "100,00€ - 750,00€",
-                desc: "Effets instantanés et intenses.",
-                prices: { "Qualité": { "1g": 100, "10g": 750 } }
+                desc: "Description : le crack procure des effets instantanés et intenses. Idéal pour faire la fête ou pour un regain d’énergie.",
+                prices: { "Options": { "1g=100€": 100, "2g=200€": 200, "3,5g=300€": 300, "7g=550€": 550, "10g=750,00€": 750 } }
+            },
+            "rohypnol": {
+                name: "Rohypnol",
+                img: "https://res.cloudinary.com/dar9eevt3/image/upload/v1/-5767180595447841515_120_ggihnb",
+                range: "150,00€ - 1220,00€",
+                desc: "Le Rohypnol est un dépresseur du système nerveux central appartenant à la classe des benzodiazépines. Il est prescrit pour le traitement à court terme de l'insomnie sévère. Nous assurons une livraison sûre et fiable pour répondre à vos besoins.",
+                prices: {
+                    "1mg": { "90 tabs=150€": 150, "120 pills=210€": 210, "150 pills=275€": 275, "300 pills=500€": 500, "360 pills=600€": 600, "600 pills=1000€": 1000 },
+                    "2mg": { "90 tabs=210€": 210, "120 pills=275€": 275, "150 pills=340€": 340, "300 pills=660€": 660, "360 pills=780€": 780, "600 pills=1220€": 1220 }
+                }
+            },
+            "adderall": {
+                name: "Adderall",
+                img: "https://res.cloudinary.com/dar9eevt3/image/upload/v1/-5782989369337037424_121_mar9z7",
+                range: "120,00€ - 3250,00€",
+                desc: "L'Adderall est un médicament de premier plan conçu pour aider les personnes à améliorer leur concentration, leur attention et à gérer les symptômes associés au TDAH et à la narcolepsie. Nos comprimés d'Adderall sont de haute qualité et proviennent de sources fiables.",
+                prices: {
+                    "10mg": { "20 tabs=120€": 120, "60 tabs=325€": 325, "100 tabs=600€": 600, "500 tabs=2400€": 2400 },
+                    "15mg": { "20 tabs=135€": 135, "60 tabs=385€": 385, "100 tabs=675€": 675, "500 tabs=2600€": 2600 },
+                    "20mg": { "20 tabs=145€": 145, "60 tabs=420€": 420, "100 tabs=700€": 700, "500 tabs=2800€": 2800 },
+                    "25mg": { "20 tabs=155€": 155, "60 tabs=450€": 450, "100 tabs=750€": 750, "500 tabs=3000€": 3000 },
+                    "30mg": { "20 tabs=165€": 165, "60 tabs=480€": 480, "100 tabs=800€": 800, "500 tabs=3250€": 3250 }
+                }
             }
         };
 
@@ -300,13 +201,7 @@
             catalog.innerHTML = "";
             for (let id in productsDB) {
                 const p = productsDB[id];
-                catalog.innerHTML += `
-                    <div class="card">
-                        <img src="${p.img}">
-                        <h3>${p.name}</h3>
-                        <p class="price-range">${p.range}</p>
-                        <button class="btn-black" onclick="openProduct('${id}')">Sélectionner</button>
-                    </div>`;
+                catalog.innerHTML += `<div class="card"><img src="${p.img}"><h3>${p.name}</h3><p class="price-range">${p.range}</p><button class="btn-black" onclick="openProduct('${id}')">Sélectionner</button></div>`;
             }
         }
 
@@ -316,15 +211,9 @@
             document.getElementById('detail-title').innerText = p.name;
             document.getElementById('detail-img').src = p.img;
             document.getElementById('detail-desc').innerText = p.desc;
-
             const doseSel = document.getElementById('sel-dose');
             doseSel.innerHTML = '<option value="">-- Choisir --</option>';
-            for(let d in p.prices) {
-                let opt = document.createElement('option');
-                opt.value = d; opt.innerText = d;
-                doseSel.appendChild(opt);
-            }
-
+            for(let d in p.prices) { doseSel.innerHTML += `<option value="${d}">${d}</option>`; }
             document.getElementById('view-catalog').style.display = 'none';
             document.getElementById('view-detail').style.display = 'block';
             window.scrollTo(0,0);
@@ -343,11 +232,7 @@
             if(dose) {
                 qtySel.disabled = false;
                 const qtys = productsDB[currentId].prices[dose];
-                for(let q in qtys) {
-                    let opt = document.createElement('option');
-                    opt.value = q; opt.innerText = q;
-                    qtySel.appendChild(opt);
-                }
+                for(let q in qtys) { qtySel.innerHTML += `<option value="${q}">${q}</option>`; }
             } else { qtySel.disabled = true; }
             document.getElementById('price-area').style.display = 'none';
         }
@@ -361,7 +246,6 @@
                 document.getElementById('price-area').style.display = 'block';
             }
         }
-
         renderCatalog();
     </script>
 </body>
