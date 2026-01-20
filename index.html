@@ -5,160 +5,243 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Store</title>
     <style>
-        body { font-family: sans-serif; background: #f4f4f4; margin: 0; padding: 20px; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f7f6; margin: 0; padding: 15px; }
         
-        /* PAGE 1 : CATALOGUE */
+        /* CATALOGUE : 2 COLONNES */
         #view-catalog {
             display: grid;
-            grid-template-columns: 1fr 1fr; /* 2 colonnes côte à côte */
+            grid-template-columns: 1fr 1fr;
             gap: 15px;
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
         }
 
         .card {
             background: white;
-            padding: 15px;
-            border-radius: 10px;
+            padding: 12px;
+            border-radius: 12px;
             text-align: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
-        .card img { width: 100%; height: 150px; object-fit: cover; border-radius: 5px; }
-        
+        .card img { width: 100%; height: 160px; object-fit: cover; border-radius: 8px; }
+        .card h3 { font-size: 1rem; margin: 10px 0 5px; color: #333; text-transform: uppercase; }
+        .card .price-range { font-size: 0.85rem; color: #666; font-weight: bold; margin-bottom: 10px; }
+
         .btn-black {
-            background: black;
-            color: white;
+            background: #000;
+            color: #fff;
             border: none;
             padding: 10px;
-            width: 100%;
             border-radius: 20px;
             cursor: pointer;
-            margin-top: 10px;
             font-weight: bold;
+            font-size: 0.85rem;
         }
 
-        /* PAGE 2 : DÉTAIL PRODUIT */
+        /* VUE DÉTAIL PRODUIT */
         #view-detail {
-            display: none; /* CACHÉ PAR DÉFAUT */
+            display: none; 
             background: white;
-            max-width: 400px;
+            max-width: 500px;
             margin: 0 auto;
             padding: 20px;
-            border-radius: 15px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
         }
 
-        #detail-img { width: 100%; border-radius: 10px; }
+        #detail-img { width: 100%; height: 300px; object-fit: contain; border-radius: 10px; margin-bottom: 15px; }
+        .back-link { color: #3498db; cursor: pointer; display: block; margin-bottom: 15px; font-weight: bold; text-align: left; }
+        .desc-box { font-size: 0.9rem; color: #555; background: #f9f9f9; padding: 15px; border-radius: 10px; margin: 15px 0; line-height: 1.5; text-align: left;}
         
-        .back-link { color: blue; cursor: pointer; text-decoration: underline; display: block; margin-bottom: 10px; }
-        
-        .desc { font-size: 0.9rem; color: #555; background: #eee; padding: 10px; border-radius: 5px; margin: 15px 0; }
+        .price-big { font-size: 2.2rem; color: #27ae60; font-weight: bold; margin: 20px 0; }
+        label { display: block; margin-top: 10px; font-weight: bold; font-size: 0.85rem; text-align: left; }
+        select { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #ddd; margin-top: 5px; background: #fff; }
 
-        .price-big { font-size: 2rem; color: green; font-weight: bold; margin: 15px 0; text-align: center; }
-
-        select { width: 100%; padding: 10px; margin-bottom: 10px; }
+        @media (max-width: 500px) {
+            #view-catalog { grid-template-columns: 1fr 1fr; gap: 10px; }
+            .card img { height: 130px; }
+        }
     </style>
 </head>
 <body>
 
-    <div id="view-catalog">
-        <div class="card">
-            <img src="https://res.cloudinary.com/dar9eevt3/image/upload/w_800,h_800,c_pad,b_white,f_auto,q_auto/v1/6008185598566842990_121_kzeeym">
-            <h3>Tramadol</h3>
-            <p>100€ - 10,080€</p>
-            <button class="btn-black" onclick="openProduct('tramadol')">Sélectionner</button>
-        </div>
-
-        <div class="card">
-            <img src="https://res.cloudinary.com/dar9eevt3/image/upload/w_800,h_800,c_pad,b_white,f_auto,q_auto/v1/-5897686531106260347_121_r01qi4">
-            <h3>Xanax</h3>
-            <p>100€ - 2,000€</p>
-            <button class="btn-black" onclick="openProduct('xanax')">Sélectionner</button>
-        </div>
-    </div>
+    <div id="view-catalog"></div>
 
     <div id="view-detail">
         <span class="back-link" onclick="closeProduct()">← Retour au catalogue</span>
-        
         <img id="detail-img" src="">
         <h2 id="detail-title"></h2>
-        
-        <div class="desc" id="detail-desc"></div>
+        <div class="desc-box" id="detail-desc"></div>
 
-        <label>Dosage :</label>
-        <select id="sel-dose" onchange="updateQty()"></select>
+        <div id="options-container">
+            <label id="label-dose">Dosage / Souche :</label>
+            <select id="sel-dose" onchange="updateQty()"></select>
 
-        <label>Quantité :</label>
-        <select id="sel-qty" disabled onchange="updatePrice()"></select>
+            <label>Quantité :</label>
+            <select id="sel-qty" disabled onchange="updatePrice()"></select>
+        </div>
 
         <div id="price-area" style="display:none">
             <div class="price-big"><span id="final-p">0</span>€</div>
-            <button class="btn-black" style="background:green">AJOUTER AU PANIER</button>
+            <button class="btn-black" style="background:#27ae60; width:100%; font-size:1.1rem; padding:15px; border-radius:10px;">AJOUTER AU PANIER</button>
         </div>
     </div>
 
     <script>
-        const db = {
-            tramadol: {
+        const productsDB = {
+            "tramadol": {
                 name: "Tramadol",
                 img: "https://res.cloudinary.com/dar9eevt3/image/upload/w_800,h_800,c_pad,b_white,f_auto,q_auto/v1/6008185598566842990_121_kzeeym",
-                desc: "Le tramadol est un analgésique central qui se fixe aux récepteurs opioïdes du cerveau pour soulager la douleur.",
+                range: "100€ - 10,080€",
+                desc: "Le tramadol offre une solution fiable aux personnes recherchant le confort et une meilleure qualité de vie. Son principe actif est un analgésique central qui se fixe aux récepteurs opioïdes du cerveau. Il inhibe également la recapture de la sérotonine et de la noradrénaline.",
                 prices: {
-                    "50mg": { "20": 100, "1000": 3200 },
-                    "100mg": { "20": 120, "1000": 5200 }
+                    "50mg": { "20": 100, "60": 200, "200": 500, "1000": 3200 },
+                    "100mg": { "20": 120, "60": 250, "200": 750, "1000": 5200 },
+                    "200mg": { "20": 155, "60": 310, "200": 890, "1000": 8000 },
+                    "500mg": { "20": 170, "60": 359, "200": 1050, "1000": 10080 }
                 }
             },
-            xanax: {
+            "xanax": {
                 name: "Xanax / Farmapram",
                 img: "https://res.cloudinary.com/dar9eevt3/image/upload/w_800,h_800,c_pad,b_white,f_auto,q_auto/v1/-5897686531106260347_121_r01qi4",
-                desc: "Xanax apaise le système nerveux en agissant sur les récepteurs GABA, induisant un effet calmant rapide.",
+                range: "100€ - 2,000€",
+                desc: "Xanax appartient à la classe des benzodiazépines, qui agissent en potentialisant les effets d’une substance chimique du cerveau appelée la GABA. Cette substance contribue à apaiser le cerveau et le système nerveux, induisant un effet calmant.",
                 prices: {
-                    "1mg": { "90": 100, "1500": 1200 },
-                    "2mg": { "90": 200, "1500": 2000 }
+                    "1mg": { "90": 100, "300": 250, "900": 800, "1500": 1200 },
+                    "2mg": { "90": 200, "300": 500, "900": 1500, "1500": 2000 }
+                }
+            },
+            "oxycodone": {
+                name: "Oxycodone",
+                img: "https://res.cloudinary.com/dar9eevt3/image/upload/w_800,h_800,c_pad,b_white,f_auto,q_auto/v1/-5841552167540999500_121_hcgvvv",
+                range: "200€ - 1,540€",
+                desc: "L’oxycodone est un médicament puissant qui soulage efficacement les douleurs modérées à sévères. Sa formule à libération prolongée assure un soulagement durable. NB: nos pilules sont de qualité pharmaceutique stricte.",
+                prices: {
+                    "40mg": { "50 tabs": 200, "100 tabs": 385, "500 tabs": 850, "1000 tabs": 1445 },
+                    "80mg": { "50 tabs": 220, "100 tabs": 440, "500 tabs": 900, "1000 tabs": 1540 }
+                }
+            },
+            "sustanon": {
+                name: "Sustanon",
+                img: "https://res.cloudinary.com/dar9eevt3/image/upload/w_800,h_800,c_pad,b_white,f_auto,q_auto/v1/-6043878872740643122_121_m0qsee",
+                range: "100€ - 18,720€",
+                desc: "Mélange injectable de testostérone utilisé pour les traitements hormonaux substitutifs (THS) et l'amélioration des performances sportives. Offre des effets immédiats et durables.",
+                prices: {
+                    "250mg": { "2": 110, "10": 450, "100": 4260, "500": 17040 },
+                    "300mg": { "2": 130, "10": 520, "100": 4680, "500": 18720 }
+                }
+            },
+            "hash": {
+                name: "Hashish",
+                img: "https://res.cloudinary.com/dar9eevt3/image/upload/w_800,h_800,c_pad,b_white,f_auto,q_auto/v1/hash_bporrc",
+                range: "100€ - 650€",
+                desc: "Découvrez notre sélection de haschisch marocain, charas roulé à la main et bubble hash puissant.",
+                prices: {
+                    "Marocain Premium": { "2.5g": 100, "5g": 180, "10g": 340, "20g": 650 },
+                    "Charas Himalayan": { "2.5g": 100, "5g": 180, "10g": 340, "20g": 650 },
+                    "Bubble Hash": { "2.5g": 100, "5g": 180, "10g": 340, "20g": 650 }
+                }
+            },
+            "ritalin": {
+                name: "Ritalin",
+                img: "https://res.cloudinary.com/dar9eevt3/image/upload/w_800,h_800,c_pad,b_white,f_auto,q_auto/v1/-6021417898884580395_121_aztv3s",
+                range: "180€ - 2,050€",
+                desc: "Conçu pour améliorer la concentration et l'attention, et aider à gérer le trouble déficitaire de l'attention avec hyperactivité (TDAH).",
+                prices: {
+                    "10mg": { "20 tabs": 180, "60 tabs": 360, "100 tabs": 465, "500 tabs": 1870 },
+                    "20mg": { "20 tabs": 200, "60 tabs": 380, "100 tabs": 485, "500 tabs": 1890 },
+                    "30mg": { "20 tabs": 220, "60 tabs": 400, "100 tabs": 505, "500 tabs": 2010 },
+                    "40mg": { "20 tabs": 240, "60 tabs": 420, "100 tabs": 525, "500 tabs": 2030 },
+                    "60mg": { "20 tabs": 260, "60 tabs": 440, "100 tabs": 545, "500 tabs": 2050 }
+                }
+            },
+            "lsd": {
+                name: "LSD Gel",
+                img: "https://res.cloudinary.com/dar9eevt3/image/upload/w_800,h_800,c_pad,b_white,f_auto,q_auto/v1/-4972279485802064825_121_jgjzac",
+                range: "100€ - 625€",
+                desc: "Expérience psychédélique intense avec du LSD de qualité supérieure. Disponible en gélules ou buvards.",
+                prices: {
+                    "150ug": { "10 tabs": 100, "20 tabs": 175, "1 sheet": 500 },
+                    "250ug": { "10 tabs": 120, "20 tabs": 200, "1 sheet": 550 },
+                    "350ug": { "10 tabs": 130, "20 tabs": 210, "1 sheet": 600 },
+                    "450ug": { "10 tabs": 130, "20 tabs": 220, "1 sheet": 625 }
+                }
+            },
+            "lyrica": {
+                name: "Lyrica",
+                img: "https://res.cloudinary.com/dar9eevt3/image/upload/w_800,h_800,c_pad,b_white,f_auto,q_auto/v1/-5068903352175275397_120_btunww",
+                range: "100€ - 1,300€",
+                desc: "Utilisé pour traiter les douleurs neuropathiques, l'épilepsie et le trouble anxieux généralisé (TAG).",
+                prices: {
+                    "25mg": { "112 tabs": 100, "280 tabs": 200, "560 tabs": 400 },
+                    "50mg": { "112 tabs": 150, "280 tabs": 300, "560 tabs": 400 },
+                    "75mg": { "56 tabs": 100, "112 tabs": 175, "280 tabs": 350, "560 tabs": 700 },
+                    "150mg": { "56 tabs": 150, "112 tabs": 300, "280 tabs": 550, "560 tabs": 1000 },
+                    "300mg": { "56 tabs": 200, "112 tabs": 375, "280 tabs": 700, "560 tabs": 1300 }
                 }
             }
         };
 
+        const catalog = document.getElementById('view-catalog');
         let currentId = "";
+
+        function renderCatalog() {
+            catalog.innerHTML = "";
+            for (let id in productsDB) {
+                const p = productsDB[id];
+                catalog.innerHTML += `
+                    <div class="card">
+                        <img src="${p.img}">
+                        <h3>${p.name}</h3>
+                        <p class="price-range">${p.range}</p>
+                        <button class="btn-black" onclick="openProduct('${id}')">Sélectionner</button>
+                    </div>
+                `;
+            }
+        }
 
         function openProduct(id) {
             currentId = id;
-            const p = db[id];
-
-            // On remplit les infos
+            const p = productsDB[id];
             document.getElementById('detail-title').innerText = p.name;
             document.getElementById('detail-img').src = p.img;
             document.getElementById('detail-desc').innerText = p.desc;
 
-            // On remplit les dosages
             const doseSel = document.getElementById('sel-dose');
             doseSel.innerHTML = '<option value="">-- Choisir --</option>';
             for(let d in p.prices) {
-                doseSel.innerHTML += `<option value="${d}">${d}</option>`;
+                let opt = document.createElement('option');
+                opt.value = d; opt.innerText = d;
+                doseSel.appendChild(opt);
             }
 
-            // On cache le catalogue et on montre le détail
             document.getElementById('view-catalog').style.display = 'none';
             document.getElementById('view-detail').style.display = 'block';
             window.scrollTo(0,0);
         }
 
         function closeProduct() {
-            // On fait l'inverse : montre catalogue, cache détail
             document.getElementById('view-catalog').style.display = 'grid';
             document.getElementById('view-detail').style.display = 'none';
+            document.getElementById('price-area').style.display = 'none';
         }
 
         function updateQty() {
             const dose = document.getElementById('sel-dose').value;
             const qtySel = document.getElementById('sel-qty');
             qtySel.innerHTML = '<option value="">-- Choisir --</option>';
-            
             if(dose) {
                 qtySel.disabled = false;
-                const qtys = db[currentId].prices[dose];
+                const qtys = productsDB[currentId].prices[dose];
                 for(let q in qtys) {
-                    qtySel.innerHTML += `<option value="${q}">${q} unités</option>`;
+                    let opt = document.createElement('option');
+                    opt.value = q; opt.innerText = q;
+                    qtySel.appendChild(opt);
                 }
             } else { qtySel.disabled = true; }
             document.getElementById('price-area').style.display = 'none';
@@ -168,11 +251,13 @@
             const dose = document.getElementById('sel-dose').value;
             const qty = document.getElementById('sel-qty').value;
             if(dose && qty) {
-                const price = db[currentId].prices[dose][qty];
-                document.getElementById('final-p').innerText = price;
+                const price = productsDB[currentId].prices[dose][qty];
+                document.getElementById('final-p').innerText = price.toLocaleString();
                 document.getElementById('price-area').style.display = 'block';
             }
         }
+
+        renderCatalog();
     </script>
 </body>
 </html>
