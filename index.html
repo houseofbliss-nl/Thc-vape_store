@@ -3,128 +3,122 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pharmacy Store</title>
+    <title>Store</title>
     <style>
-        /* --- CSS --- */
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f7f6;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #f8f9fa;
             margin: 0;
-            padding: 20px;
+            padding: 15px;
             display: flex;
             justify-content: center;
-            align-items: center;
-            min-height: 100vh;
         }
 
-        .container {
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap; /* S'adapte sur mobile */
-            justify-content: center;
-            max-width: 1200px;
+        /* GRILLE PRINCIPALE : 2 colonnes */
+        .product-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* Force deux colonnes égales */
+            gap: 15px;
+            max-width: 800px;
             width: 100%;
         }
 
         .product-card {
             background: white;
-            padding: 25px;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-            max-width: 350px;
-            width: 100%;
+            border-radius: 12px;
+            padding: 15px;
             text-align: center;
-            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
         .product-image img {
             width: 100%;
-            height: 250px;
-            object-fit: contain; /* Garde les proportions de l'image */
-            background-color: #fff;
-            border-radius: 12px;
-            margin-bottom: 15px;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 8px;
         }
 
-        h1 { margin: 10px 0; font-size: 1.4rem; color: #333; height: 3.5rem; display: flex; align-items: center; justify-content: center; }
-        .price-range { color: #666; font-size: 1.1rem; margin-bottom: 25px; font-weight: 500; }
+        h1 { 
+            font-size: 1.1rem; 
+            color: #333; 
+            margin: 15px 0 5px 0;
+            min-height: 40px; 
+        }
+
+        .price-range { 
+            color: #666; 
+            font-size: 0.95rem; 
+            font-weight: bold;
+            margin-bottom: 15px; 
+        }
 
         .btn-primary {
-            display: block;
-            background-color: #000;
+            background-color: #000; /* Noir comme sur votre 1ère image */
             color: #fff;
-            padding: 12px;
+            padding: 12px 5px;
             text-decoration: none;
-            border-radius: 30px;
+            border-radius: 25px;
             font-weight: bold;
             border: none;
             width: 100%;
             cursor: pointer;
-            transition: 0.3s;
+            font-size: 0.85rem;
         }
 
-        .btn-primary:hover { background-color: #333; transform: translateY(-2px); }
-
+        /* --- VUE DÉTAILS --- */
         .hidden { display: none; }
         
         .back-link {
             display: block;
             text-align: left;
-            margin-bottom: 15px;
             color: #3498db;
-            text-decoration: none;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
+            margin-bottom: 10px;
             cursor: pointer;
         }
 
         .description {
             text-align: left;
-            font-size: 0.85rem;
-            color: #777;
-            line-height: 1.6;
-            margin: 15px 0;
-            padding: 12px;
-            background: #f9f9f9;
-            border-radius: 8px;
+            font-size: 0.8rem;
+            color: #555;
+            background: #f1f1f1;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
         }
 
-        .options-group { text-align: left; margin-bottom: 20px; }
-        .options-group label { display: block; margin-top: 10px; font-weight: bold; color: #444; }
-        
         select {
             width: 100%;
-            padding: 10px;
+            padding: 8px;
             margin-top: 5px;
-            border-radius: 8px;
+            border-radius: 5px;
             border: 1px solid #ddd;
+            margin-bottom: 10px;
         }
 
         .final-price-box {
-            margin: 20px 0;
-            padding: 10px;
-            border-top: 1px solid #eee;
-            font-size: 1.4rem;
+            font-size: 1.2rem;
             color: #27ae60;
             font-weight: bold;
+            margin: 10px 0;
         }
 
-        .btn-cart {
-            background-color: #27ae60;
-            color: white;
-            border: none;
-            padding: 14px;
-            width: 100%;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
+        /* Responsive : sur très petits écrans, on peut repasser à 1 colonne si besoin */
+        @media (max-width: 480px) {
+            .product-grid { gap: 10px; }
+            h1 { font-size: 0.95rem; }
+            .btn-primary { font-size: 0.75rem; }
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
+    <div class="product-grid">
         
-        <div id="card-tramadol" class="product-card">
+        <div class="product-card" id="card-tramadol">
             <div id="cat-tramadol">
                 <div class="product-image">
                     <img src="https://res.cloudinary.com/dar9eevt3/image/upload/w_800,h_800,c_pad,b_white,f_auto,q_auto/v1/6008185598566842990_121_kzeeym" alt="Tramadol">
@@ -136,64 +130,48 @@
 
             <div id="det-tramadol" class="hidden">
                 <span class="back-link" onclick="toggleView('tramadol', 'catalog')">← Retour</span>
-                <h1>Tramadol</h1>
-                <p class="description">
-                    Le tramadol offre une solution fiable aux personnes recherchant le confort et une meilleure qualité de vie. Son principe actif est un analgésique central qui se fixe aux récepteurs opioïdes du cerveau. Il inhibe également la recapture de la sérotonine et de la noradrénaline ; deux neurotransmetteurs impliqués dans la transmission de la douleur.
-                </p>
-                <div class="options-group">
-                    <label>Dosage:</label>
-                    <select id="dose-tramadol" onchange="updateOptions('tramadol')">
-                        <option value="">-- Choisir --</option>
-                        <option value="50mg">50mg</option>
-                        <option value="100mg">100mg</option>
-                        <option value="200mg">200mg</option>
-                        <option value="500mg">500mg</option>
-                    </select>
-
-                    <label>Quantité:</label>
-                    <select id="qty-tramadol" disabled onchange="calculatePrice('tramadol')">
-                        <option value="">-- Sélectionnez le dosage --</option>
-                    </select>
-                </div>
+                <p class="description">Le tramadol offre une solution fiable aux personnes recherchant le confort et une meilleure qualité de vie...</p>
+                <select id="dose-tramadol" onchange="updateOptions('tramadol')">
+                    <option value="">-- Dosage --</option>
+                    <option value="50mg">50mg</option>
+                    <option value="100mg">100mg</option>
+                    <option value="200mg">200mg</option>
+                    <option value="500mg">500mg</option>
+                </select>
+                <select id="qty-tramadol" disabled onchange="calculatePrice('tramadol')">
+                    <option value="">-- Quantité --</option>
+                </select>
                 <div id="price-box-tramadol" class="hidden">
-                    <div class="final-price-box">Total: <span id="price-tramadol">0</span>€</div>
-                    <button class="btn-cart">Ajouter au panier</button>
+                    <div class="final-price-box"><span id="price-tramadol">0</span>€</div>
+                    <button class="btn-primary" style="background:#27ae60">Ajouter</button>
                 </div>
             </div>
         </div>
 
-        <div id="card-xanax" class="product-card">
+        <div class="product-card" id="card-xanax">
             <div id="cat-xanax">
                 <div class="product-image">
                     <img src="https://res.cloudinary.com/dar9eevt3/image/upload/w_800,h_800,c_pad,b_white,f_auto,q_auto/v1/-5897686531106260347_121_r01qi4" alt="Xanax">
                 </div>
-                <h1>XANAX/FARMAPRAM/ALPRAZOLAM</h1>
+                <h1>XANAX/FARMAPRAM</h1>
                 <p class="price-range">100€ - 2,000€</p>
                 <button class="btn-primary" onclick="toggleView('xanax', 'details')">Sélectionnez les options</button>
             </div>
 
             <div id="det-xanax" class="hidden">
                 <span class="back-link" onclick="toggleView('xanax', 'catalog')">← Retour</span>
-                <h1>Xanax</h1>
-                <p class="description">
-                    Xanax appartient à la classe des benzodiazépines, qui agissent en potentialisant les effets d’une substance chimique du cerveau appelée la GABA. Cette substance contribue à apaiser le cerveau et le système nerveux, induisant un effet calmant.
-                </p>
-                <div class="options-group">
-                    <label>Dosage:</label>
-                    <select id="dose-xanax" onchange="updateOptions('xanax')">
-                        <option value="">-- Choisir --</option>
-                        <option value="1mg">1mg</option>
-                        <option value="2mg">2mg</option>
-                    </select>
-
-                    <label>Quantité:</label>
-                    <select id="qty-xanax" disabled onchange="calculatePrice('xanax')">
-                        <option value="">-- Sélectionnez le dosage --</option>
-                    </select>
-                </div>
+                <p class="description">Xanax appartient à la classe des benzodiazépines, induisant un effet calmant.</p>
+                <select id="dose-xanax" onchange="updateOptions('xanax')">
+                    <option value="">-- Dosage --</option>
+                    <option value="1mg">1mg</option>
+                    <option value="2mg">2mg</option>
+                </select>
+                <select id="qty-xanax" disabled onchange="calculatePrice('xanax')">
+                    <option value="">-- Quantité --</option>
+                </select>
                 <div id="price-box-xanax" class="hidden">
-                    <div class="final-price-box">Total: <span id="price-xanax">0</span>€</div>
-                    <button class="btn-cart">Ajouter au panier</button>
+                    <div class="final-price-box"><span id="price-xanax">0</span>€</div>
+                    <button class="btn-primary" style="background:#27ae60">Ajouter</button>
                 </div>
             </div>
         </div>
@@ -215,51 +193,32 @@
         };
 
         function toggleView(id, view) {
-            const cat = document.getElementById('cat-' + id);
-            const det = document.getElementById('det-' + id);
-            if (view === 'details') {
-                cat.classList.add('hidden');
-                det.classList.remove('hidden');
-            } else {
-                cat.classList.remove('hidden');
-                det.classList.add('hidden');
-            }
+            document.getElementById('cat-' + id).classList.toggle('hidden', view === 'details');
+            document.getElementById('det-' + id).classList.toggle('hidden', view === 'catalog');
         }
 
         function updateOptions(id) {
             const dosage = document.getElementById('dose-' + id).value;
             const qtySelect = document.getElementById('qty-' + id);
-            const priceBox = document.getElementById('price-box-' + id);
-
-            qtySelect.innerHTML = '<option value="">-- Choisir quantité --</option>';
-            priceBox.classList.add('hidden');
-
+            qtySelect.innerHTML = '<option value="">-- Qté --</option>';
+            document.getElementById('price-box-' + id).classList.add('hidden');
             if (dosage) {
                 qtySelect.disabled = false;
-                const options = data[id][dosage];
-                for (let qty in options) {
+                for (let qty in data[id][dosage]) {
                     let opt = document.createElement('option');
                     opt.value = qty;
-                    opt.textContent = qty + " bars/pills (" + options[qty] + "€)";
+                    opt.textContent = qty + (id === 'xanax' ? ' bars' : ' pills');
                     qtySelect.appendChild(opt);
                 }
-            } else {
-                qtySelect.disabled = true;
-            }
+            } else { qtySelect.disabled = true; }
         }
 
         function calculatePrice(id) {
             const dosage = document.getElementById('dose-' + id).value;
             const qty = document.getElementById('qty-' + id).value;
-            const priceBox = document.getElementById('price-box-' + id);
-            const priceSpan = document.getElementById('price-' + id);
-
             if (dosage && qty) {
-                const price = data[id][dosage][qty];
-                priceSpan.textContent = price.toLocaleString();
-                priceBox.classList.remove('hidden');
-            } else {
-                priceBox.classList.add('hidden');
+                document.getElementById('price-' + id).textContent = data[id][dosage][qty].toLocaleString();
+                document.getElementById('price-box-' + id).classList.remove('hidden');
             }
         }
     </script>
