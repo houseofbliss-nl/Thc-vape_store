@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tramadol Store</title>
+    <style>
+        /* --- CSS --- */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .product-card {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            max-width: 380px;
+            width: 100%;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .product-image img {
+            width: 100%;
+            border-radius: 12px;
+            margin-bottom: 15px;
+        }
+
+        h1 { margin: 10px 0; font-size: 1.6rem; color: #333; }
+        .price-range { color: #666; font-size: 1.2rem; margin-bottom: 25px; font-weight: 500; }
+
+        .btn-primary {
+            display: block;
+            background-color: #000;
+            color: #fff;
+            padding: 15px;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: bold;
+            border: none;
+            width: 100%;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 1rem;
+        }
+
+        .btn-primary:hover { background-color: #333; transform: translateY(-2px); }
+
+        /* Styles pour la vue Détails */
+        .hidden { display: none; }
+        
+        .back-link {
+            display: block;
+            text-align: left;
+            margin-bottom: 15px;
+            color: #3498db;
+            text-decoration: none;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        .description {
+            text-align: left;
+            font-size: 0.85rem;
+            color: #777;
+            line-height: 1.6;
+            margin: 20px 0;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 8px;
+        }
+
+        .options-group { text-align: left; margin-bottom: 20px; }
+        .options-group label { display: block; margin-top: 15px; font-weight: bold; color: #444; }
+        
+        select {
+            width: 100%;
+            padding: 12px;
+            margin-top: 8px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            background-color: #fff;
+            font-size: 0.95rem;
+        }
+
+        .final-price-box {
+            margin: 25px 0;
+            padding: 15px;
+            border-top: 1px solid #eee;
+            font-size: 1.5rem;
+            color: #27ae60;
+            font-weight: bold;
+        }
+
+        .btn-cart {
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            padding: 16px;
+            width: 100%;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="view-catalog" class="product-card">
+        <div class="product-image">
+            <img src="https://res.cloudinary.com/dar9eevt3/image/upload/w_800,h_800,c_pad,b_white,f_auto,q_auto/v1/6008185598566842990_121_kzeeym" alt="Tramadol">
+        </div>
+        <h1>Tramadol</h1>
+        <p class="price-range">100€ - 10,080€</p>
+        <button class="btn-primary" onclick="switchView('view-details')">Select options</button>
+    </div>
+
+    <div id="view-details" class="product-card hidden">
+        <span class="back-link" onclick="switchView('view-catalog')">← Back</span>
+        
+        <h1>Tramadol</h1>
+        
+        <p class="description">
+            Tramadol offers a reliable solution for individuals seeking comfort and an improved quality of life. Its active ingredient binds to opioid receptors in the brain.
+        </p>
+
+        <div class="options-group">
+            <label for="dosage">Dosage:</label>
+            <select id="dosage" onchange="handleDosageChange()">
+                <option value="">-- Choose an option --</option>
+                <option value="50mg">50mg</option>
+                <option value="100mg">100mg</option>
+                <option value="200mg">200mg</option>
+                <option value="500mg">500mg</option>
+            </select>
+
+            <label for="quantite">Quantity:</label>
+            <select id="quantite" disabled onchange="handleQuantityChange()">
+                <option value="">-- Select dosage first --</option>
+            </select>
+        </div>
+
+        <div id="price-display" class="hidden">
+            <div class="final-price-box">
+                Total: <span id="final-price">0</span>€
+            </div>
+            <button class="btn-cart">Add to Cart</button>
+        </div>
+    </div>
+
+    <script>
+        /* --- JAVASCRIPT --- */
+        const productData = {
+            "50mg": { "20": 100, "60": 200, "200": 500, "1000": 3200 },
+            "100mg": { "20": 120, "60": 250, "200": 750, "1000": 5200 },
+            "200mg": { "20": 155, "60": 310, "200": 890, "1000": 8000 },
+            "500mg": { "20": 170, "60": 359, "200": 1050, "1000": 10080 }
+        };
+
+        // Fonction pour changer de vue
+        function switchView(viewId) {
+            document.getElementById('view-catalog').classList.add('hidden');
+            document.getElementById('view-details').classList.add('hidden');
+            document.getElementById(viewId).classList.remove('hidden');
+        }
+
+        // Gestion du changement de dosage
+        function handleDosageChange() {
+            const dosage = document.getElementById('dosage').value;
+            const qtySelect = document.getElementById('quantite');
+            const priceDisplay = document.getElementById('price-display');
+
+            qtySelect.innerHTML = '<option value="">-- Choose quantity --</option>';
+            priceDisplay.classList.add('hidden');
+
+            if (dosage) {
+                qtySelect.disabled = false;
+                const options = productData[dosage];
+                for (let qty in options) {
+                    let opt = document.createElement('option');
+                    opt.value = qty;
+                    opt.textContent = qty + " pills";
+                    qtySelect.appendChild(opt);
+                }
+            } else {
+                qtySelect.disabled = true;
+            }
+        }
+
+        // Gestion du prix final
+        function handleQuantityChange() {
+            const dosage = document.getElementById('dosage').value;
+            const qty = document.getElementById('quantite').value;
+            const priceDisplay = document.getElementById('price-display');
+            const finalPriceSpan = document.getElementById('final-price');
+
+            if (dosage && qty) {
+                const price = productData[dosage][qty];
+                finalPriceSpan.textContent = price.toLocaleString();
+                priceDisplay.classList.remove('hidden');
+            } else {
+                priceDisplay.classList.add('hidden');
+            }
+        }
+    </script>
+</body>
+</html>
